@@ -2,8 +2,6 @@ import passport from "passport";
 import GoogleStrategy from "passport-google-oidc";
 import envs from "../configs/environments.js";
 
-let emails = ["d.ruiz03@ufromail.cl"];
-
 passport.use(
   "auth-google",
   new GoogleStrategy(
@@ -14,14 +12,7 @@ passport.use(
       scope: ["profile"],
     },
     function verify(issuer, profile, done) {
-      const response = emails.includes(profile.emails[0].value);
-
-      if (response) {
-        done(null, profile);
-      } else {
-        emails.push(profile.emails[0].value);
-        done(null, profile);
-      }
+      done(null, profile);
     }
   )
 );
