@@ -5,6 +5,7 @@ import passport from "passport";
 import session from "express-session";
 import "./middlewares/google.middleware.js"
 import envs from "./configs/environments.js";
+import connect from "./configs/mongo.js";
 
 const app = express();
 
@@ -27,6 +28,15 @@ app.use("/auth", passport.authenticate("auth-google", {
     session: false
 }), loginRouter);
 
-app.listen(envs.PORT, () => {
-  console.log(`Server is running on PORT: 3000`);
-});
+console.log("Conectando a la base de datos...");
+connect()
+  .then(() => {
+    console.log("MongoDB Conectado Correctamente");
+    app.listen(envs.PORT, async () => {
+      console.log(`Servidor iniciado en el PUERTO: ${envs.PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+    process.exit(-1);
+  });
